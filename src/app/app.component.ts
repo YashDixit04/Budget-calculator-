@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { HeaderComponent } from "./header/header.component";
 import { UserInputComponent } from "./user-input/user-input.component";
 import type { InvestmentInput } from './investment-input.module';
@@ -11,18 +11,29 @@ import { InvestmentResultsComponent } from "./investment-results/investment-resu
   imports: [HeaderComponent, UserInputComponent, InvestmentResultsComponent],
 })
 export class AppComponent {
-resultsData? :{
-  year: number,
-  interest: number,
-  valueEndOfYear: number,
-  annualInvestment: number,
-  totalInterest: number,
-  totalAmountInvested: number,
-}[];
+
+
+  resultsData = signal<{
+    year: number,
+    interest: number,
+    valueEndOfYear: number,
+    annualInvestment: number,
+    totalInterest: number,
+    totalAmountInvested: number,
+  }[] | undefined>(undefined);
+
+  // resultsData? :{
+  //   year: number,
+  //   interest: number,
+  //   valueEndOfYear: number,
+  //   annualInvestment: number,
+  //   totalInterest: number,
+  //   totalAmountInvested: number,
+  // }[];
 
 
   onCalculateInvestmentResults(data: InvestmentInput) {
-    const { initialInvestment, duration, expectedReturn, annualInvestment} = data;
+    const { initialInvestment, duration, expectedReturn, annualInvestment } = data;
     const annualData = [];
     let investmentValue = initialInvestment;
 
@@ -42,7 +53,8 @@ resultsData? :{
       });
     }
 
-    this.resultsData = annualData;
+    // this.resultsData = annualData;
+    this.resultsData.set(annualData);
   }
 
 }
